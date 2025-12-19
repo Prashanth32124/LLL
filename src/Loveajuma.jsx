@@ -51,6 +51,135 @@ const nextImage = () => {
   return (
     <>
       <style>{`
+      /* ================= MOBILE LAYOUT FIX ================= */
+@media (max-width: 768px) {
+
+  body {
+    height: auto;
+  }
+
+  /* Main container */
+  .love-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 20px 0 60px;
+    gap: 40px; /* MAIN GAP BETWEEN SECTIONS */
+  }
+
+  .love-title {
+    position: static;
+    margin: 10px 0 20px;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  /* RESET ABSOLUTE POSITIONING */
+  .love-tree,
+  .scene,
+  .proposal-card,
+  .kiss-card,
+  .my-love-card,
+  .love-text {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: 92%;
+    margin: 0 auto;
+  }
+
+  /* ===== FLOW ORDER ===== */
+  .love-tree { order: 1; }
+  .scene { order: 2; }
+  .proposal-card { order: 3; }
+  .kiss-card { order: 4; }
+  .my-love-card { order: 5; }
+  .love-text { order: 6; }
+
+  /* ===== FLOWCHART ===== */
+  .love-tree {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
+
+  .tree-line {
+    left: 5px;
+  }
+
+  /* ===== CUBE ===== */
+  .scene {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 20px;
+    width: 220px;
+    height: 220px;
+  }
+
+  .cube {
+    margin: auto;
+  }
+
+  .face {
+    width: 220px;
+    height: 220px;
+  }
+
+  .front  { transform: rotateY(0deg) translateZ(110px); }
+  .back   { transform: rotateY(180deg) translateZ(110px); }
+  .right  { transform: rotateY(90deg) translateZ(110px); }
+  .left   { transform: rotateY(-90deg) translateZ(110px); }
+  .top    { transform: rotateX(90deg) translateZ(110px); }
+  .bottom { transform: rotateX(-90deg) translateZ(110px); }
+
+  /* ===== PROPOSAL CARD ===== */
+  .proposal-card {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .proposal-image {
+    height: 180px;
+  }
+
+  /* ===== KISS SECTION ===== */
+  .kiss-card {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .kiss-videos video {
+    height: 180px;
+  }
+
+  /* ===== MY LOVE SECTION ===== */
+  .my-love-card {
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+
+  .love-image {
+    width: 200px;
+    height: 180px;
+    margin: 0 auto;
+  }
+
+  /* ===== FOOTER ===== */
+  .love-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1rem;
+  }
+}
+
      * {
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
@@ -363,24 +492,28 @@ body {
 
       <div className="love-container">
         <h1 className="love-title">Our Love Cube 💖</h1>
-
-        {/* TREE */}
-        <div className="love-tree">
-          <div className="tree-line"></div>
-          <div className="tree-node">Najma 🌸<small>(rizz)</small></div>
-          <div className="tree-node">Bunny 🐰<small>(like)</small></div>
-          <div className="tree-node">Baby 💕<small>(love)</small></div>
-          <div className="tree-node">Ajuma 💖<small>(Relatioship)</small></div>
-          <div className="tree-separator">────</div>
-          <div className="tree-node">Prashanth 🙂 <small>(no feelings on me for ajuma)</small></div>
-          <div className="tree-node">Prassh 😄<small>(no feelings on me for ajuma)</small></div>
-          <div className="tree-node">Bear 🐻<small>(like)</small></div>
-          <div className="tree-node">Baby ❤️<small>(Love)</small></div>
-          <div className="tree-node">Paccuuu 🫶<small>(Relationship)</small></div>
-          <div className="tree-separator">────</div>
-          <div className="tree-node">📍 First Met <small>18–23 Oct 2025</small></div>
-          <div className="tree-node">💍 Proposal <small>25 Nov 2025</small></div>
+    {/* CUBE */}
+        <div
+          className="scene"
+          onMouseDown={startDrag}
+          onMouseUp={stopDrag}
+          onMouseLeave={stopDrag}
+          onMouseMove={onDrag}
+        >
+          <div
+            className={`cube ${isDragging ? "dragging" : "auto"}`}
+            style={{ transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` }}
+          >
+            <div className="face front"><img src={l2} /></div>
+            <div className="face back"><img src={l4} /></div>
+            <div className="face right"><img src={l6} /></div>
+            <div className="face left"><img src={l5} /></div>
+            <div className="face top"><img src={l1} /></div>
+            <div className="face bottom"><img src={l3} /></div>
+          </div>
         </div>
+
+        <p className="love-text">From the first day we met to forever 💕</p>
        {/* KISS SECTION */}
 <div className="kiss-card">
   <h2 className="kiss-title">💋 Kiss Section</h2>
@@ -434,31 +567,24 @@ body {
     Happy tears, shaking hands, racing hearts ✨
   </p>
 </div>
-
-
-        {/* CUBE */}
-        <div
-          className="scene"
-          onMouseDown={startDrag}
-          onMouseUp={stopDrag}
-          onMouseLeave={stopDrag}
-          onMouseMove={onDrag}
-        >
-          <div
-            className={`cube ${isDragging ? "dragging" : "auto"}`}
-            style={{ transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` }}
-          >
-            <div className="face front"><img src={l2} /></div>
-            <div className="face back"><img src={l4} /></div>
-            <div className="face right"><img src={l6} /></div>
-            <div className="face left"><img src={l5} /></div>
-            <div className="face top"><img src={l1} /></div>
-            <div className="face bottom"><img src={l3} /></div>
-          </div>
-        </div>
-
-        <p className="love-text">From the first day we met to forever 💕</p>
       </div>
+        {/* TREE */}
+        <div className="love-tree">
+          <div className="tree-line"></div>
+          <div className="tree-node">Najma 🌸<small>(rizz)</small></div>
+          <div className="tree-node">Bunny 🐰<small>(like)</small></div>
+          <div className="tree-node">Baby 💕<small>(love)</small></div>
+          <div className="tree-node">Ajuma 💖<small>(Relatioship)</small></div>
+          <div className="tree-separator">────</div>
+          <div className="tree-node">Prashanth 🙂 <small>(no feelings on me for ajuma)</small></div>
+          <div className="tree-node">Prassh 😄<small>(no feelings on me for ajuma)</small></div>
+          <div className="tree-node">Bear 🐻<small>(like)</small></div>
+          <div className="tree-node">Baby ❤️<small>(Love)</small></div>
+          <div className="tree-node">Paccuuu 🫶<small>(Relationship)</small></div>
+          <div className="tree-separator">────</div>
+          <div className="tree-node">📍 First Met <small>18–23 Oct 2025</small></div>
+          <div className="tree-node">💍 Proposal <small>25 Nov 2025</small></div>
+        </div>
     </>
   );
 };

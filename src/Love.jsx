@@ -103,7 +103,10 @@ const popup = () => {
     <h2 className="after-letter">
       I love u ajuma… I’m waiting for you on Insta ❤️ 
     </h2>
-    <button onClick={() => navigate("/Loveajuma")}>see our relationship ajuma baby</button>
+    <button onClick={() => navigate("/loveajuma")}>
+  see our relationship ajuma baby
+</button>
+
   </>
 )}
 
