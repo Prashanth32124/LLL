@@ -20,8 +20,6 @@ import l4 from "./images/l4.jpg";
 import l5 from "./images/l5.jpg";
 import l6 from "./images/l6.jpg";
 import cry from './images/pcr.jpg';
-import firstKiss from '../public/videos/firstKiss.mp4';
-import secondkiss from '../public/videos/secondKiss.mp4';
 const Loveajuma = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -383,16 +381,25 @@ body {
           <div className="tree-node">📍 First Met <small>18–23 Oct 2025</small></div>
           <div className="tree-node">💍 Proposal <small>25 Nov 2025</small></div>
         </div>
-        {/* KISS SECTION */}
+       {/* KISS SECTION */}
 <div className="kiss-card">
   <h2 className="kiss-title">💋 Kiss Section</h2>
   <p className="kiss-subtitle">For Prashu from Ajuma Baby 💖</p>
 
   <div className="kiss-videos">
-    <video src={firstKiss} controls playsInline />
-    <video src={secondkiss} controls playsInline />
+    <video
+      src="/videos/firstkiss.mp4"
+      controls
+      playsInline
+    />
+    <video
+      src="/videos/secondkiss.mp4"
+      controls
+      playsInline
+    />
   </div>
 </div>
+
 {/* MY LOVE SECTION */}
 <div className="my-love-card">
   <h2 className="my-love-title">💖 My Love Section</h2>

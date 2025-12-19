@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import img1 from "./images/1.png";
 import img2 from "./images/Main.png";
 import img3 from "./images/l.png";
-import useNavigate from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function Love() {
   const [showMessage, setShowMessage] = useState(false);
   const [accepted, setAccepted] = useState(false);
