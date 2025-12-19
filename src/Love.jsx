@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import img1 from "./images/1.png";
 import img2 from "./images/Main.png";
 import img3 from "./images/l.png";
+import useNavigate from "react-router-dom";
 export default function Love() {
   const [showMessage, setShowMessage] = useState(false);
   const [accepted, setAccepted] = useState(false);
-
+  const navigate = useNavigate();
   const loveText = `
 Hey bunny…
 
@@ -101,6 +102,7 @@ const popup = () => {
     <h2 className="after-letter">
       I love u ajuma… I’m waiting for you on Insta ❤️ 
     </h2>
+    <button onClick={() => navigate("/Loveajuma")}>see our relationship ajuma baby</button>
   </>
 )}
 
