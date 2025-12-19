@@ -1,17 +1,20 @@
-import logo from './logo.svg';
-import Love from './Love.jsx';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Loveajuma from './Loveajuma.jsx';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Love from "./Love";
+import Loveajuma from "./Loveajuma";
+
 function App() {
   return (
-    <div>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Love/>} />
-          <Route path="/loveajuma" element={<Loveajuma />} />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        {/* FORCE ROOT */}
+        <Route path="/" element={<Love />} />
+
+        {/* OPTIONAL: redirect unknown paths */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
+        <Route path="/loveajuma" element={<Loveajuma />} />
+      </Routes>
+    </Router>
   );
 }
 

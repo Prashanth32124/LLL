@@ -51,144 +51,50 @@ const nextImage = () => {
   return (
     <>
       <style>{`
-      /* ================= MOBILE LAYOUT FIX ================= */
-@media (max-width: 768px) {
+      /* ================= MOBILE BLOCK ================= */
 
-  body {
-    height: auto;
-  }
+.mobile-block {
+  display: none;
+}
 
-  /* Main container */
-  .love-container {
-    position: relative;
+@media (max-width: 1024px) {
+  .mobile-block {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
-    padding: 20px 0 60px;
-    gap: 40px; /* MAIN GAP BETWEEN SECTIONS */
-  }
 
-  .love-title {
-    position: static;
-    margin: 10px 0 20px;
-    font-size: 2rem;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: white;
     text-align: center;
+    padding: 30px;
   }
 
-  /* RESET ABSOLUTE POSITIONING */
+  .mobile-block h1 {
+    font-size: 2.3rem;
+    margin-bottom: 12px;
+  }
+
+  .mobile-block p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  /* HIDE EVERYTHING ELSE ON MOBILE */
+  .love-container,
   .love-tree,
   .scene,
   .proposal-card,
   .kiss-card,
   .my-love-card,
   .love-text {
-    position: static !important;
-    transform: none !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    width: 92%;
-    margin: 0 auto;
+    display: none !important;
   }
-
-  /* ===== FLOW ORDER ===== */
-  .love-tree { order: 1; }
-  .scene { order: 2; }
-  .proposal-card { order: 3; }
-  .kiss-card { order: 4; }
-  .my-love-card { order: 5; }
-  .love-text { order: 6; }
-
-  /* ===== FLOWCHART ===== */
-  .love-tree {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    padding-left: 10px;
-  }
-
-  .tree-line {
-    left: 5px;
-  }
-
-  /* ===== CUBE ===== */
-  .scene {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 0 20px;
-    width: 220px;
-    height: 220px;
-  }
-
-  .cube {
-    margin: auto;
-  }
-
-  .face {
-    width: 220px;
-    height: 220px;
-  }
-
-  .front  { transform: rotateY(0deg) translateZ(110px); }
-  .back   { transform: rotateY(180deg) translateZ(110px); }
-  .right  { transform: rotateY(90deg) translateZ(110px); }
-  .left   { transform: rotateY(-90deg) translateZ(110px); }
-  .top    { transform: rotateX(90deg) translateZ(110px); }
-  .bottom { transform: rotateX(-90deg) translateZ(110px); }
-
-  /* ===== PROPOSAL CARD ===== */
-  .proposal-card {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-
-  .proposal-image {
-    height: 180px;
-  }
-
-  /* ===== KISS SECTION ===== */
-  .kiss-card {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-
-  .kiss-videos video {
-    height: 180px;
-  }
-
-  /* ===== MY LOVE SECTION ===== */
-  .my-love-card {
-    margin-top: 10px;
-    margin-bottom: 30px;
-  }
-
-  .love-image {
-    width: 200px;
-    height: 180px;
-    margin: 0 auto;
-  }
-
-  /* ===== FOOTER ===== */
-  .love-text {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 1rem;
-  }
-}
-
-     * {
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
 }
 
 /* ================= MAIN ================= */
@@ -487,8 +393,37 @@ body {
 .nav-btn:hover {
   transform: scale(1.1);
 }
+  /* ================= DESKTOP PINK BACKGROUND ================= */
+@media (min-width: 769px) {
+  body {
+    margin: 0;
+    min-height: 100vh;
+
+    background: linear-gradient(
+      135deg,
+      #ff9a9e,
+      #fad0c4,
+      #ffc3a0
+    );
+
+    background-attachment: fixed;
+  }
+
+  .love-container {
+    background: transparent;
+  }
+}
+
 
       `}</style>
+        {/* MOBILE BLOCK */}
+<div className="mobile-block">
+  <h1>💻 Laptop Only</h1>
+  <p>
+    This love page is specially designed for laptop screens ❤️<br />
+    Please open it on a laptop to experience it properly.
+  </p>
+</div>
 
       <div className="love-container">
         <h1 className="love-title">Our Love Cube 💖</h1>
