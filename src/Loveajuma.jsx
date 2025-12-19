@@ -20,8 +20,8 @@ import l4 from "./images/l4.jpg";
 import l5 from "./images/l5.jpg";
 import l6 from "./images/l6.jpg";
 import cry from './images/pcr.jpg';
-import firstKiss from './videos/firstkiss.mp4';
-import secondkiss from './videos/secondkiss.mp4';
+import firstKiss from '../public/videos/firstKiss.mp4';
+import secondkiss from '../public/videos/secondKiss.mp4';
 const Loveajuma = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
