@@ -16,7 +16,7 @@ function Login() {
     }
 
     try {
-      const res = await axios.post("https://rp2backend.vercel.app/login", {
+      const res = await axios.post("https://lbackend.vercel.app/login", {
         username: username.trim(),
         password: password.trim(),
       });
