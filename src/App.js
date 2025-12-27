@@ -2,18 +2,46 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Love from "./Love";
 import Loveajuma from "./Loveajuma";
 import LoveLoading from "./LoveLoading";
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
+
 function App() {
   return (
     <Router>
       <Routes>
-        {/* FORCE ROOT */}
-        <Route path="/" element={<Love />} />
+        {/* LOGIN PAGE */}
+        <Route path="/" element={<Login />} />
 
-        {/* OPTIONAL: redirect unknown paths */}
+        {/* PROTECTED ROUTES */}
+        <Route
+          path="/love"
+          element={
+            <ProtectedRoute>
+              <Love />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/loveloading"
+          element={
+            <ProtectedRoute>
+              <LoveLoading />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/loveajuma"
+          element={
+            <ProtectedRoute>
+              <Loveajuma />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* BLOCK UNKNOWN PATHS */}
         <Route path="*" element={<Navigate to="/" replace />} />
-
-        <Route path="/loveajuma" element={<Loveajuma />} />
-        <Route path="/loveloading" element={<LoveLoading />} />
       </Routes>
     </Router>
   );
