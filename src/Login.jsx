@@ -23,13 +23,12 @@ function Login() {
       });
 
       if (res.data.success) {
-        // ✅ SET AUTH PROPERLY
+        // ✅ SET AUTH (IMPORTANT)
         sessionStorage.clear();
         sessionStorage.setItem("isAuth", "true");
         sessionStorage.setItem("name", username);
 
-        alert("Welcome my love ❤️");
-        navigate("/love");
+        navigate("/love"); // ✅ NAVIGATE
       } else {
         setError(res.data.message || "Login failed 💔");
       }
@@ -73,7 +72,7 @@ function Login() {
 
 export default Login;
 
-/* 💕 STYLES */
+/* 💕 Styles */
 const styles = {
   page: {
     height: "100vh",
