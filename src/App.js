@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./Login";
 import Love from "./Love";
 import Loveajuma from "./Loveajuma";
 import LoveLoading from "./LoveLoading";
-import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* LOGIN PAGE */}
+        {/* LOGIN */}
         <Route path="/" element={<Login />} />
 
         {/* PROTECTED ROUTES */}
@@ -40,7 +40,7 @@ function App() {
           }
         />
 
-        {/* BLOCK UNKNOWN PATHS */}
+        {/* BLOCK UNKNOWN */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

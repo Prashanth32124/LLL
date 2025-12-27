@@ -10,6 +10,7 @@ function Login() {
 
   const handleLogin = async () => {
     setError("");
+
     if (!username || !password) {
       setError("Username and password cannot be empty 💔");
       return;
@@ -22,19 +23,21 @@ function Login() {
       });
 
       if (res.data.success) {
+        // ✅ SET AUTH PROPERLY
         sessionStorage.clear();
+        sessionStorage.setItem("isAuth", "true");
         sessionStorage.setItem("name", username);
-        sessionStorage.setItem("token", "yes");
+
         alert("Welcome my love ❤️");
         navigate("/love");
       } else {
         setError(res.data.message || "Login failed 💔");
       }
     } catch (err) {
-      setError("Something went wrong 💔");
+      setError("Server error 💔");
+      console.error(err);
     }
   };
-
 
   return (
     <div style={styles.page}>
@@ -62,7 +65,6 @@ function Login() {
           Enter My Heart ❤️
         </button>
 
-
         {error && <p style={styles.error}>{error}</p>}
       </div>
     </div>
@@ -70,6 +72,8 @@ function Login() {
 }
 
 export default Login;
+
+/* 💕 STYLES */
 const styles = {
   page: {
     height: "100vh",
@@ -77,9 +81,8 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontFamily: "'Segoe UI', sans-serif",
+    fontFamily: "Segoe UI, sans-serif",
   },
-
   card: {
     background: "rgba(255,255,255,0.15)",
     backdropFilter: "blur(12px)",
@@ -89,19 +92,16 @@ const styles = {
     textAlign: "center",
     boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
   },
-
   title: {
     color: "#fff",
-    marginBottom: "10px",
     fontSize: "26px",
+    marginBottom: "10px",
   },
-
   subtitle: {
     color: "#ffe6f0",
-    marginBottom: "25px",
     fontSize: "14px",
+    marginBottom: "25px",
   },
-
   input: {
     width: "100%",
     padding: "12px",
@@ -109,9 +109,7 @@ const styles = {
     borderRadius: "10px",
     border: "none",
     outline: "none",
-    fontSize: "14px",
   },
-
   loginBtn: {
     width: "100%",
     padding: "12px",
@@ -121,21 +119,7 @@ const styles = {
     color: "#fff",
     fontSize: "15px",
     cursor: "pointer",
-    marginBottom: "10px",
-    transition: "0.3s",
   },
-
-  adminBtn: {
-    width: "100%",
-    padding: "10px",
-    background: "transparent",
-    border: "1px solid #fff",
-    borderRadius: "12px",
-    color: "#fff",
-    fontSize: "13px",
-    cursor: "pointer",
-  },
-
   error: {
     marginTop: "15px",
     color: "#ffe6e6",
