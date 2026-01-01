@@ -4,7 +4,7 @@ import Love from "./Love";
 import Loveajuma from "./Loveajuma";
 import LoveLoading from "./LoveLoading";
 import ProtectedRoute from "./ProtectedRoute";
-
+import Message from "./Message";
 function App() {
   return (
     <Router>
@@ -36,6 +36,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Loveajuma />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/message"
+          element={
+            <ProtectedRoute>
+              <Message />
             </ProtectedRoute>
           }
         />
