@@ -1,3 +1,11 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* 🔥 prevents page scroll */
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
 .App {
   text-align: center;
 }

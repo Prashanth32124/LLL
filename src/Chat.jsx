@@ -20,6 +20,7 @@ function Chat() {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const scrollRef = useRef(null);
+  const longPressTimer = useRef(null); // ✅ ADDED (mobile long press)
   const navigate = useNavigate();
   const name = (sessionStorage.getItem("name") || "").toLowerCase().trim();
 
@@ -75,11 +76,42 @@ function Chat() {
       setOnlineList(users)
     );
 
+    /* 🗑️ SOCKET LISTENER FOR UNSEND */
+    socket.on("messageDeleted", (messageId) => {
+      setMessages((prev) => prev.filter((m) => m._id !== messageId));
+    });
+
     return () => {
       socket.off("receiveMessage");
       socket.off("updateUserStatus");
+      socket.off("messageDeleted");
     };
   }, [name]);
+
+  /* 🗑️ UNSEND FUNCTION (SAFE) */
+  const unsendMessage = async (msgId, sender) => {
+    if (!msgId) {
+      alert("Message ID not available yet. Try again.");
+      return;
+    }
+
+    if (sender !== name) return;
+    if (!window.confirm("Unsend this message?")) return;
+
+    try {
+      await axios.delete(
+        `https://lbackend-2.onrender.com/api/messages/${msgId}`
+      );
+
+      if (socket.connected) {
+        socket.emit("deleteMessage", msgId);
+      }
+
+      setMessages((prev) => prev.filter((m) => m._id !== msgId));
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
 
   /* 🔽 CONVERT IMAGE TO JPEG */
   const convertToJpeg = (inputFile) =>
@@ -196,12 +228,31 @@ function Chat() {
         <div className="chat-messages" ref={scrollRef}>
           {messages.map((msg, i) => (
             <div
-              key={i}
+              key={msg._id || i}
               className={msg.sender === name ? "message own" : "message"}
+              onDoubleClick={() => unsendMessage(msg._id, msg.sender)}
+              onTouchStart={() => {
+                longPressTimer.current = setTimeout(() => {
+                  unsendMessage(msg._id, msg.sender);
+                }, 600);
+              }}
+              onTouchEnd={() => clearTimeout(longPressTimer.current)}
             >
               <div className="message-info">
                 <strong>{msg.sender}</strong>
+                {msg.sender === name && (
+                  <span
+                    className="unsend-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      unsendMessage(msg._id, msg.sender);
+                    }}
+                  >
+                    ×
+                  </span>
+                )}
               </div>
+
               <div className="message-content">
                 {msg.content && <p>{msg.content}</p>}
                 {msg.image && (
@@ -210,6 +261,7 @@ function Chat() {
               </div>
             </div>
           ))}
+
           {isUploading && (
             <div className="loading-status">
               Processing {uploadProgress}% 🚀
@@ -271,6 +323,16 @@ function Chat() {
             placeholder={isUploading ? "Wait..." : "Write a love note..."}
             disabled={isUploading}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            autoComplete="off"
+            onFocus={() => {
+              setTimeout(() => {
+                window.scrollTo(0, 0);
+                if (scrollRef.current) {
+                  scrollRef.current.scrollTop =
+                    scrollRef.current.scrollHeight;
+                }
+              }, 300);
+            }}
           />
 
           <button
