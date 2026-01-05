@@ -14,8 +14,8 @@ function App() {
     <Router>
       <Routes>
         {/* 🌸 PUBLIC ROUTES */}
-        <Route path="/" element={<Login />} />
-        <Route path="/devotional" element={<Devotional />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Devotional />} />
 
         {/* 🔐 PROTECTED ROUTES */}
         <Route
