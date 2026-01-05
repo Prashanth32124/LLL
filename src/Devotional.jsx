@@ -5,18 +5,15 @@ import "./CSS/Devotional.css";
 function Devotional() {
   const navigate = useNavigate();
   
-  // Variabel untuk melacak ketukan tombol 'P'
   let pKeyCount = 0;
   let pKeyTimer;
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Logika Shortcut: Tekan 'P' 2 kali untuk ke Login
       if (e.key.toLowerCase() === "p") {
         pKeyCount++;
         clearTimeout(pKeyTimer);
         
-        // Reset hitungan jika jeda antar ketukan lebih dari 500ms
         pKeyTimer = setTimeout(() => {
           pKeyCount = 0;
         }, 500);
@@ -66,6 +63,13 @@ function Devotional() {
             <h4>Maha Pemberi Rezeki</h4>
             <p>Tidak ada makhluk melata pun yang luput dari jaminan-Nya.</p>
           </div>
+        </div>
+
+        {/* 🔽 ADDED LOGIN BUTTON */}
+        <div className="action-area">
+          <button className="devotional-login-btn" onClick={() => navigate("/login")}>
+            Masuk Ke Aplikasi
+          </button>
         </div>
 
         <div className="shortcut-hint">Tetaplah dalam Dzikir</div>
