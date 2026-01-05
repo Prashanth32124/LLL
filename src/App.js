@@ -1,23 +1,37 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./Login";
 import Love from "./Love";
 import Loveajuma from "./Loveajuma";
 import LoveLoading from "./LoveLoading";
 import ProtectedRoute from "./ProtectedRoute";
 import Message from "./Message";
+import Chat from "./Chat";
+import Devotional from "./Devotional";
+
 function App() {
   return (
     <Router>
       <Routes>
-        {/* LOGIN */}
+        {/* 🌸 PUBLIC ROUTES */}
         <Route path="/" element={<Login />} />
+        <Route path="/devotional" element={<Devotional />} />
 
-        {/* PROTECTED ROUTES */}
+        {/* 🔐 PROTECTED ROUTES */}
         <Route
           path="/love"
           element={
             <ProtectedRoute>
               <Love />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
             </ProtectedRoute>
           }
         />
@@ -39,6 +53,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/message"
           element={
@@ -48,7 +63,7 @@ function App() {
           }
         />
 
-        {/* BLOCK UNKNOWN */}
+        {/* 🚫 FALLBACK */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

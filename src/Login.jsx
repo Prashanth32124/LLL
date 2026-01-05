@@ -1,40 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  /* 🔐 SECRET DOUBLE 'N' SHORTCUT */
+  useEffect(() => {
+    let nKeyCount = 0;
+    let nKeyTimer;
+
+    const handleNShortcut = (e) => {
+      if (e.key.toLowerCase() === "n") {
+        nKeyCount++;
+        clearTimeout(nKeyTimer);
+
+        nKeyTimer = setTimeout(() => {
+          nKeyCount = 0;
+        }, 500);
+
+        if (nKeyCount === 2) {
+          navigate("/devotional");
+          nKeyCount = 0;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleNShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleNShortcut);
+      clearTimeout(nKeyTimer);
+    };
+  }, [navigate]);
+
+  /* 🔑 LOGIN HANDLER */
   const handleLogin = async () => {
     setError("");
 
-    if (!username || !password) {
+    if (!username.trim() || !password.trim()) {
       setError("Username and password cannot be empty 💔");
       return;
     }
 
     try {
-      const res = await axios.post("https://lbackend.vercel.app/login", {
-        username: username.trim(),
-        password: password.trim(),
-      });
+      const res = await axios.post(
+        "https://lbackend.vercel.app/login",
+        {
+          username: username.trim(),
+          password: password.trim(),
+        }
+      );
 
       if (res.data.success) {
-        // ✅ SET AUTH (IMPORTANT)
         sessionStorage.clear();
         sessionStorage.setItem("isAuth", "true");
-        sessionStorage.setItem("name", username);
+        sessionStorage.setItem("name", username.trim().toLowerCase());
 
-        navigate("/love"); // ✅ NAVIGATE
+        navigate("/love");
       } else {
         setError(res.data.message || "Login failed 💔");
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError("Server error 💔");
-      console.error(err);
     }
   };
 
@@ -58,6 +91,7 @@ function Login() {
           placeholder="Love password ❤️"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         />
 
         <button style={styles.loginBtn} onClick={handleLogin}>

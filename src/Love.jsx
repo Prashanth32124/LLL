@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import img1 from "./images/1.png";
 import img2 from "./images/Main.png";
 import img3 from "./images/l.png";
@@ -8,6 +8,35 @@ export default function Love() {
   const [showMessage, setShowMessage] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const navigate = useNavigate();
+
+  /* 🔑 PRESS 'P' TWICE → GO TO CHAT */
+  useEffect(() => {
+    let pCount = 0;
+    let pTimer;
+
+    const handlePKey = (e) => {
+      if (e.key.toLowerCase() === "p") {
+        pCount++;
+        clearTimeout(pTimer);
+
+        pTimer = setTimeout(() => {
+          pCount = 0;
+        }, 500); // time window
+
+        if (pCount === 2) {
+          navigate("/chat");
+          pCount = 0;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handlePKey);
+
+    return () => {
+      window.removeEventListener("keydown", handlePKey);
+      clearTimeout(pTimer);
+    };
+  }, [navigate]);
 
   const loveText = `
 Hey bunny…
@@ -33,8 +62,8 @@ And this is my proposal my lovely bunny ❤️
   const popup = () => {
     alert(
       "Hey bunny, you aren’t eligible to reject 😆\n" +
-      "You can’t see my heart… how it feels, my little heart 💗🐰\n\n" +
-      "I am sorry bunny, but the reject button is disabled. Please accept my love ❤️"
+        "You can’t see my heart… how it feels, my little heart 💗🐰\n\n" +
+        "I am sorry bunny, but the reject button is disabled. Please accept my love ❤️"
     );
   };
 
@@ -44,7 +73,10 @@ And this is my proposal my lovely bunny ❤️
 
         {/* ❤️ STEP 1 */}
         {!showMessage && !accepted && (
-          <button className="heart-btn" onClick={() => setShowMessage(true)}>
+          <button
+            className="heart-btn"
+            onClick={() => setShowMessage(true)}
+          >
             ❤️ Click My Heart
           </button>
         )}
@@ -52,7 +84,6 @@ And this is my proposal my lovely bunny ❤️
         {/* 💌 STEP 2 */}
         {showMessage && !accepted && (
           <div className="love-box">
-
             <div className="img-row">
               <img src={img1} className="love-img" alt="bunny" />
               <img src={img2} className="love-img" alt="bear" />
@@ -61,7 +92,10 @@ And this is my proposal my lovely bunny ❤️
             {loveText}
 
             <div style={{ marginTop: "25px" }}>
-              <button className="accept-btn" onClick={() => setAccepted(true)}>
+              <button
+                className="accept-btn"
+                onClick={() => setAccepted(true)}
+              >
                 Accept
               </button>
 
@@ -81,7 +115,7 @@ And this is my proposal my lovely bunny ❤️
                 backgroundImage: `url(${img3})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
+                backgroundRepeat: "no-repeat",
               }}
             >
               <p>
@@ -111,10 +145,9 @@ And this is my proposal my lovely bunny ❤️
               see our relationship ajuma baby
             </button>
 
-            {/* 🎉 NEW YEAR BUTTON */}
             <button
               className="newyear-btn"
-              onClick={() => navigate("/Message")}
+              onClick={() => navigate("/message")}
             >
               🎉 Welcome to 2026 my love, Ajuma cutie pie ❤️  
               <br />
@@ -122,7 +155,6 @@ And this is my proposal my lovely bunny ❤️
             </button>
           </>
         )}
-
       </div>
 
       {/* 🎨 STYLES */}
@@ -135,7 +167,6 @@ And this is my proposal my lovely bunny ❤️
   font-family: "Poppins", Arial, sans-serif;
 }
 
-/* Heart button */
 .heart-btn {
   background-color: #ff4d6d;
   color: white;
@@ -145,14 +176,8 @@ And this is my proposal my lovely bunny ❤️
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(255, 0, 72, 0.4);
-  transition: 0.3s;
 }
 
-.heart-btn:hover {
-  transform: scale(1.08);
-}
-
-/* Proposal box */
 .love-box {
   width: 80%;
   margin-top: 25px;
@@ -163,10 +188,8 @@ And this is my proposal my lovely bunny ❤️
   font-size: 20px;
   white-space: pre-line;
   line-height: 1.7;
-  box-shadow: 0 0 22px rgba(255, 140, 160, 0.6);
 }
 
-/* Images */
 .img-row {
   display: flex;
   justify-content: center;
@@ -178,18 +201,14 @@ And this is my proposal my lovely bunny ❤️
   width: 95px;
   height: 95px;
   border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(255, 120, 160, 0.3);
 }
 
-/* Buttons */
 .accept-btn {
   background: #22c55e;
   color: white;
   padding: 12px 22px;
   border-radius: 10px;
   border: none;
-  font-size: 17px;
-  margin-right: 10px;
 }
 
 .reject-btn {
@@ -198,36 +217,17 @@ And this is my proposal my lovely bunny ❤️
   padding: 12px 22px;
   border-radius: 10px;
   border: none;
-  font-size: 17px;
 }
 
-/* Love letter */
 .love-letter {
   width: 80%;
   max-width: 650px;
   margin-top: 30px;
   padding: 45px 35px;
   border-radius: 16px;
-  font-family: "Times New Roman", serif;
   font-size: 22px;
-  line-height: 1.8;
-  color: #2e1a0f;
-  position: relative;
 }
 
-.love-letter::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.32);
-}
-
-.love-letter p {
-  position: relative;
-  z-index: 2;
-}
-
-/* After text */
 .after-letter {
   margin-top: 20px;
   font-size: 28px;
@@ -235,25 +235,15 @@ And this is my proposal my lovely bunny ❤️
   color: #d6336c;
 }
 
-/* 🌟 NEW YEAR BUTTON */
 .newyear-btn {
   margin-top: 25px;
   padding: 16px 26px;
   font-size: 20px;
-  font-weight: 600;
   border-radius: 18px;
   border: none;
   cursor: pointer;
   background: linear-gradient(135deg, #ff7aa2, #ff4d6d);
   color: white;
-  box-shadow: 0 8px 25px rgba(255, 80, 120, 0.45);
-  animation: glowPulse 2.5s infinite;
-}
-
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 15px rgba(255, 80, 120, 0.4); }
-  50% { box-shadow: 0 0 30px rgba(255, 120, 160, 0.7); }
-  100% { box-shadow: 0 0 15px rgba(255, 80, 120, 0.4); }
 }
       `}</style>
     </>
