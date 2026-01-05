@@ -49,7 +49,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "https://lbackend.vercel.app/login",
+        "https://lbackend-2.onrender.com/login",
         {
           username: username.trim(),
           password: password.trim(),

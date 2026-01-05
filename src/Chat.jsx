@@ -62,7 +62,7 @@ function Chat() {
   /* 🔽 SOCKET + LOAD MSGS */
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/messages")
+      .get("https://lbackend-2.onrender.com/api/messages")
       .then((res) => setMessages(res.data));
 
     socket.emit("joinChat", name);
