@@ -1,23 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
 .devotional-wrapper {
-  /* Latar belakang nuansa alam/masjid yang tenang */
-  background: url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070') no-repeat center center/cover;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
+  background: url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070')
+    no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
+  padding-bottom: 40px;
 }
 
 .overlay-gradient {
   position: absolute;
   inset: 0;
-  /* Gradien hijau zamrud untuk nuansa islami */
-  background: radial-gradient(circle, rgba(6, 78, 59, 0.85) 0%, rgba(2, 44, 34, 0.98) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(6, 78, 59, 0.85) 0%,
+    rgba(2, 44, 34, 0.98) 100%
+  );
   z-index: 1;
 }
 
@@ -26,17 +30,17 @@
   z-index: 2;
   color: white;
   text-align: center;
-  max-width: 800px;
+  max-width: 900px;
   padding: 20px;
-  animation: fadeIn 2s ease-in-out;
+  animation: fadeIn 1.8s ease;
 }
 
+/* TEXT */
 .bismillah-text {
   font-family: 'Amiri', serif;
-  font-size: 3.5rem;
-  color: #fbbf24; /* Emas */
+  font-size: 3.2rem;
+  color: #fbbf24;
   margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
 }
 
 .central-frame {
@@ -48,84 +52,147 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
 }
 
 .allah-kaligrafi {
   font-family: 'Amiri', serif;
-  font-size: 5rem;
-  font-weight: bold;
+  font-size: 4.5rem;
 }
 
 .devotional-title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
+  font-size: 2.1rem;
+  margin-bottom: 18px;
 }
 
 .verse-text {
-  font-style: italic;
-  font-weight: 300;
+  font-size: 1.1rem;
   line-height: 1.8;
-  font-size: 1.2rem;
   margin-bottom: 40px;
-  opacity: 0.9;
 }
 
 .verse-text span {
-  font-size: 0.9rem;
   color: #fbbf24;
+  font-size: 0.9rem;
 }
 
+/* CARDS */
 .devotional-cards {
   display: flex;
-  justify-content: center;
   gap: 20px;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
 .devotional-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
   padding: 20px;
-  border-radius: 20px;
-  width: 220px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
+  border-radius: 18px;
+  width: 230px;
+  transition: transform 0.3s;
 }
 
 .devotional-card:hover {
-  transform: translateY(-10px);
-  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px);
 }
 
-.devotional-card .icon {
+.icon {
   font-size: 2rem;
-  display: block;
   margin-bottom: 10px;
 }
 
 .devotional-card h4 {
   color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+/* STUDY SECTION */
+.study-section {
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 30px;
+  border-radius: 22px;
+}
+
+.study-section h3 {
+  color: #fbbf24;
+  margin-bottom: 20px;
+}
+
+.study-section ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.study-section li {
   margin-bottom: 10px;
 }
 
-.devotional-card p {
-  font-size: 0.85rem;
-  line-height: 1.4;
+.study-note {
+  margin-top: 20px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* LOGIN BUTTON */
+.action-area {
+  margin-top: 45px;
+}
+
+.devotional-login-btn {
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1f2937;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.35);
+}
+
+.devotional-login-btn:hover {
+  transform: translateY(-3px);
 }
 
 .shortcut-hint {
-  margin-top: 60px;
+  margin-top: 25px;
   font-size: 0.75rem;
-  opacity: 0.4;
-  letter-spacing: 4px;
-  text-transform: uppercase;
+  opacity: 0.5;
+  letter-spacing: 3px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .bismillah-text {
+    font-size: 2.1rem;
+  }
+
+  .allah-kaligrafi {
+    font-size: 3.4rem;
+  }
+
+  .devotional-title {
+    font-size: 1.6rem;
+  }
+
+  .devotional-card {
+    width: 90%;
+  }
+
+  .study-section {
+    padding: 20px;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

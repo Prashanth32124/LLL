@@ -9,41 +9,40 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  /* 🔐 SECRET DOUBLE 'N' SHORTCUT */
+  /* 🔐 TEKAN 'N' DUA KALI → HALAMAN DEVOTIONAL */
   useEffect(() => {
-    let nKeyCount = 0;
-    let nKeyTimer;
+    let nCount = 0;
+    let nTimer;
 
     const handleNShortcut = (e) => {
       if (e.key.toLowerCase() === "n") {
-        nKeyCount++;
-        clearTimeout(nKeyTimer);
+        nCount++;
+        clearTimeout(nTimer);
 
-        nKeyTimer = setTimeout(() => {
-          nKeyCount = 0;
+        nTimer = setTimeout(() => {
+          nCount = 0;
         }, 500);
 
-        if (nKeyCount === 2) {
+        if (nCount === 2) {
           navigate("/devotional");
-          nKeyCount = 0;
+          nCount = 0;
         }
       }
     };
 
     window.addEventListener("keydown", handleNShortcut);
-
     return () => {
       window.removeEventListener("keydown", handleNShortcut);
-      clearTimeout(nKeyTimer);
+      clearTimeout(nTimer);
     };
   }, [navigate]);
 
-  /* 🔑 LOGIN HANDLER */
+  /* 🔑 LOGIN */
   const handleLogin = async () => {
     setError("");
 
     if (!username.trim() || !password.trim()) {
-      setError("Username and password cannot be empty 💔");
+      setError("Nama dan kata sandi tidak boleh kosong");
       return;
     }
 
@@ -63,24 +62,30 @@ function Login() {
 
         navigate("/love");
       } else {
-        setError(res.data.message || "Login failed 💔");
+        setError("Nama atau kata sandi salah");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError("Server error 💔");
+      setError("Terjadi kesalahan pada server");
     }
   };
 
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.title}>💖 Welcome Back 💖</h1>
-        <p style={styles.subtitle}>Enter your heart’s credentials</p>
+        <h1 style={styles.title}>
+          بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+        </h1>
+
+        <p style={styles.subtitle}>
+          Masuk untuk belajar, merenung,  
+          dan mendekat kepada Allah SWT
+        </p>
 
         <input
           style={styles.input}
           type="text"
-          placeholder="Your name 🫶"
+          placeholder="Nama pengguna"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -88,74 +93,91 @@ function Login() {
         <input
           style={styles.input}
           type="password"
-          placeholder="Love password ❤️"
+          placeholder="Kata sandi"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         />
 
         <button style={styles.loginBtn} onClick={handleLogin}>
-          Enter My Heart ❤️
+          Masuk Untuk Menuntut Ilmu
         </button>
 
         {error && <p style={styles.error}>{error}</p>}
+
+        <p style={styles.hint}>
+          Tekan huruf <b>N</b> dua kali untuk masuk ke halaman dzikir
+        </p>
       </div>
     </div>
   );
 }
 
 export default Login;
-
-/* 💕 Styles */
 const styles = {
   page: {
-    height: "100vh",
-    background: "linear-gradient(135deg, #ff758c, #ff7eb3)",
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #064e3b, #022c22)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontFamily: "Segoe UI, sans-serif",
+    fontFamily: "Poppins, Segoe UI, sans-serif",
+    padding: "20px",
   },
   card: {
-    background: "rgba(255,255,255,0.15)",
-    backdropFilter: "blur(12px)",
+    background: "rgba(255,255,255,0.1)",
+    backdropFilter: "blur(14px)",
     padding: "40px",
-    borderRadius: "20px",
-    width: "320px",
+    borderRadius: "24px",
+    width: "100%",
+    maxWidth: "360px",
     textAlign: "center",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+    boxShadow: "0 15px 40px rgba(0,0,0,0.35)",
   },
   title: {
-    color: "#fff",
-    fontSize: "26px",
-    marginBottom: "10px",
+    color: "#fbbf24",
+    fontSize: "22px",
+    marginBottom: "14px",
+    fontFamily: "'Amiri', serif",
   },
   subtitle: {
-    color: "#ffe6f0",
+    color: "#ecfeff",
     fontSize: "14px",
     marginBottom: "25px",
+    lineHeight: "1.6",
   },
   input: {
     width: "100%",
     padding: "12px",
     marginBottom: "15px",
-    borderRadius: "10px",
+    borderRadius: "12px",
     border: "none",
     outline: "none",
+    fontSize: "14px",
   },
   loginBtn: {
     width: "100%",
-    padding: "12px",
-    background: "#ff4d88",
+    padding: "13px",
+    background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
     border: "none",
-    borderRadius: "12px",
-    color: "#fff",
+    borderRadius: "30px",
+    color: "#1f2937",
     fontSize: "15px",
+    fontWeight: "600",
     cursor: "pointer",
+    marginTop: "5px",
+    boxShadow: "0 10px 25px rgba(251,191,36,0.35)",
   },
   error: {
-    marginTop: "15px",
-    color: "#ffe6e6",
+    marginTop: "14px",
+    color: "#fecaca",
     fontSize: "13px",
+  },
+  hint: {
+    marginTop: "20px",
+    fontSize: "11px",
+    opacity: 0.7,
+    color: "#ecfeff",
+    letterSpacing: "1px",
   },
 };

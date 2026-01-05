@@ -21,7 +21,7 @@ export default function Love() {
 
         pTimer = setTimeout(() => {
           pCount = 0;
-        }, 500); // time window
+        }, 500);
 
         if (pCount === 2) {
           navigate("/chat");
@@ -31,7 +31,6 @@ export default function Love() {
     };
 
     window.addEventListener("keydown", handlePKey);
-
     return () => {
       window.removeEventListener("keydown", handlePKey);
       clearTimeout(pTimer);
@@ -116,6 +115,7 @@ And this is my proposal my lovely bunny ❤️
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
+                paddingBottom: "60px"
               }}
             >
               <p>
@@ -135,13 +135,23 @@ And this is my proposal my lovely bunny ❤️
                 My little cute heart. ❤️🐰  
                 And nothing can change that.
               </p>
+
+              {/* 🔽 NEW CHAT NAVIGATION BUTTON */}
+              <div className="chat-nav-wrapper">
+                <button 
+                  className="chat-glass-btn" 
+                  onClick={() => navigate("/chat")}
+                >
+                  💬 Go to Our Private Chat
+                </button>
+              </div>
             </div>
 
             <h2 className="after-letter">
               I love u ajuma… I’m waiting for you on Insta ❤️
             </h2>
 
-            <button onClick={() => navigate("/loveloading")}>
+            <button onClick={() => navigate("/loveloading")} className="standard-btn">
               see our relationship ajuma baby
             </button>
 
@@ -157,94 +167,139 @@ And this is my proposal my lovely bunny ❤️
         )}
       </div>
 
-      {/* 🎨 STYLES */}
       <style>{`
-.love-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 40px;
-  font-family: "Poppins", Arial, sans-serif;
-}
+        .love-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 40px;
+          font-family: "Poppins", Arial, sans-serif;
+          padding-bottom: 50px;
+        }
 
-.heart-btn {
-  background-color: #ff4d6d;
-  color: white;
-  padding: 14px 26px;
-  font-size: 20px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(255, 0, 72, 0.4);
-}
+        .heart-btn {
+          background-color: #ff4d6d;
+          color: white;
+          padding: 14px 26px;
+          font-size: 20px;
+          border-radius: 14px;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(255, 0, 72, 0.4);
+          transition: transform 0.2s;
+        }
+        .heart-btn:hover { transform: scale(1.1); }
 
-.love-box {
-  width: 80%;
-  margin-top: 25px;
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(255, 220, 226, 0.95);
-  text-align: center;
-  font-size: 20px;
-  white-space: pre-line;
-  line-height: 1.7;
-}
+        .love-box {
+          width: 80%;
+          margin-top: 25px;
+          padding: 30px;
+          border-radius: 20px;
+          background: rgba(255, 220, 226, 0.95);
+          text-align: center;
+          font-size: 20px;
+          white-space: pre-line;
+          line-height: 1.7;
+          border: 1px solid #ffb3c1;
+        }
 
-.img-row {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  margin-bottom: 25px;
-}
+        .img-row {
+          display: flex;
+          justify-content: center;
+          gap: 25px;
+          margin-bottom: 25px;
+        }
 
-.love-img {
-  width: 95px;
-  height: 95px;
-  border-radius: 20px;
-}
+        .love-img {
+          width: 95px;
+          height: 95px;
+          border-radius: 20px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-.accept-btn {
-  background: #22c55e;
-  color: white;
-  padding: 12px 22px;
-  border-radius: 10px;
-  border: none;
-}
+        .accept-btn, .reject-btn {
+          padding: 12px 22px;
+          border-radius: 10px;
+          border: none;
+          cursor: pointer;
+          font-weight: 600;
+          margin: 0 10px;
+          transition: 0.3s;
+        }
 
-.reject-btn {
-  background: #f87171;
-  color: white;
-  padding: 12px 22px;
-  border-radius: 10px;
-  border: none;
-}
+        .accept-btn { background: #22c55e; color: white; }
+        .accept-btn:hover { background: #16a34a; transform: translateY(-2px); }
 
-.love-letter {
-  width: 80%;
-  max-width: 650px;
-  margin-top: 30px;
-  padding: 45px 35px;
-  border-radius: 16px;
-  font-size: 22px;
-}
+        .reject-btn { background: #f87171; color: white; }
 
-.after-letter {
-  margin-top: 20px;
-  font-size: 28px;
-  font-weight: 700;
-  color: #d6336c;
-}
+        .love-letter {
+          width: 80%;
+          max-width: 650px;
+          margin-top: 30px;
+          padding: 45px 35px;
+          border-radius: 16px;
+          font-size: 22px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+          position: relative;
+        }
 
-.newyear-btn {
-  margin-top: 25px;
-  padding: 16px 26px;
-  font-size: 20px;
-  border-radius: 18px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, #ff7aa2, #ff4d6d);
-  color: white;
-}
+        /* 🎨 PRIVATE CHAT BUTTON CSS */
+        .chat-nav-wrapper {
+          margin-top: 30px;
+          display: flex;
+          justify-content: center;
+        }
+
+        .chat-glass-btn {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.4);
+          color: #d6336c;
+          padding: 12px 25px;
+          font-size: 18px;
+          font-weight: bold;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.4s ease;
+          box-shadow: 0 8px 32px rgba(214, 51, 108, 0.2);
+        }
+
+        .chat-glass-btn:hover {
+          background: rgba(255, 255, 255, 0.4);
+          transform: translateY(-5px);
+          box-shadow: 0 12px 40px rgba(214, 51, 108, 0.4);
+          color: #ff4d6d;
+        }
+
+        .standard-btn {
+          margin-top: 20px;
+          padding: 10px 20px;
+          border-radius: 10px;
+          border: 1px solid #ff7aa2;
+          background: white;
+          color: #ff4d6d;
+          cursor: pointer;
+        }
+
+        .after-letter {
+          margin-top: 20px;
+          font-size: 28px;
+          font-weight: 700;
+          color: #d6336c;
+          text-align: center;
+        }
+
+        .newyear-btn {
+          margin-top: 25px;
+          padding: 16px 26px;
+          font-size: 20px;
+          border-radius: 18px;
+          border: none;
+          cursor: pointer;
+          background: linear-gradient(135deg, #ff7aa2, #ff4d6d);
+          color: white;
+          box-shadow: 0 6px 15px rgba(255, 77, 109, 0.4);
+        }
       `}</style>
     </>
   );
