@@ -23,13 +23,13 @@ function Chat() {
   const navigate = useNavigate();
   const name = (sessionStorage.getItem("name") || "").toLowerCase().trim();
 
-  /* 🔑 PRESS 'S' TWICE → DEVOTIONAL */
+  /* 🔑 PRESS 'N' TWICE → DEVOTIONAL */
   useEffect(() => {
     let sCount = 0;
     let sTimer;
 
     const handleSKey = (e) => {
-      if (e.key.toLowerCase() === "s") {
+      if (e.key.toLowerCase() === "n") {
         sCount++;
         clearTimeout(sTimer);
 
