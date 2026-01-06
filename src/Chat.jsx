@@ -19,7 +19,7 @@ function Chat() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // ✅ EDIT STATE (ADDED)
+  // ✅ EDIT STATE
   const [editingId, setEditingId] = useState(null);
 
   const scrollRef = useRef(null);
@@ -73,11 +73,13 @@ function Chat() {
       setMessages((prev) => [...prev, msg])
     );
 
-    // ✅ LISTEN FOR EDITED MESSAGE (ADDED)
+    // ✅ FIXED EDIT LISTENER (ONLY CHANGE HERE)
     socket.on("messageEdited", ({ id, content }) => {
       setMessages((prev) =>
         prev.map((m) =>
-          m._id === id ? { ...m, content, edited: true } : m
+          String(m._id) === String(id)
+            ? { ...m, content, edited: true }
+            : m
         )
       );
     });
@@ -170,7 +172,6 @@ function Chat() {
   const sendMessage = async () => {
     if (!message.trim() && !file) return;
 
-    // ✅ EDIT MODE (ADDED)
     if (editingId) {
       socket.emit("editMessage", {
         id: editingId,
@@ -224,7 +225,6 @@ function Chat() {
   return (
     <div className="chat-page-wrapper">
       <div className="chat-container">
-
         {/* HEADER */}
         <div className="chat-header">
           <span className="header-title">❤️ Our Private Space ❤️</span>
@@ -278,7 +278,6 @@ function Chat() {
                       />
                     )}
 
-                    {/* ✏️ EDIT BUTTON (ONLY OWN TEXT MSG) */}
                     {msg.sender === name && msg.content && (
                       <button
                         className="edit-btn"
