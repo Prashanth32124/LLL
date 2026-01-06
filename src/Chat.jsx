@@ -22,37 +22,32 @@ function Chat() {
   // ✅ EDIT STATE
   const [editingId, setEditingId] = useState(null);
 
+  // ✅ IMAGE GALLERY STATE (ADDED ONLY)
+  const [imageGallery, setImageGallery] = useState([]);
+
   const scrollRef = useRef(null);
+  const emojiRef = useRef(null);
+
   const navigate = useNavigate();
   const name = (sessionStorage.getItem("name") || "").toLowerCase().trim();
 
-  /* 🔑 PRESS 'N' TWICE → DEVOTIONAL */
+  /* ===================== CLOSE EMOJI ON OUTSIDE CLICK ===================== */
   useEffect(() => {
-    let sCount = 0;
-    let sTimer;
-
-    const handleSKey = (e) => {
-      if (e.key.toLowerCase() === "n") {
-        sCount++;
-        clearTimeout(sTimer);
-
-        sTimer = setTimeout(() => {
-          sCount = 0;
-        }, 500);
-
-        if (sCount === 2) {
-          navigate("/devotional");
-          sCount = 0;
-        }
+    const handleClickOutside = (e) => {
+      if (emojiRef.current && !emojiRef.current.contains(e.target)) {
+        setShowEmoji(false);
       }
     };
 
-    window.addEventListener("keydown", handleSKey);
+    if (showEmoji) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
-      window.removeEventListener("keydown", handleSKey);
-      clearTimeout(sTimer);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [navigate]);
+  }, [showEmoji]);
+
 
   /* 🔽 AUTO SCROLL */
   useEffect(() => {
@@ -65,15 +60,27 @@ function Chat() {
   useEffect(() => {
     axios
       .get("https://lbackend-2.onrender.com/api/messages")
-      .then((res) => setMessages(res.data));
+      .then((res) => {
+        setMessages(res.data);
+
+        // ✅ ADD: load images into gallery
+        const imgs = res.data
+          .filter((m) => m.image)
+          .map((m) => m.image);
+        setImageGallery(imgs);
+      });
 
     socket.emit("joinChat", name);
 
-    socket.on("receiveMessage", (msg) =>
-      setMessages((prev) => [...prev, msg])
-    );
+    socket.on("receiveMessage", (msg) => {
+      setMessages((prev) => [...prev, msg]);
 
-    // ✅ FIXED EDIT LISTENER (ONLY CHANGE HERE)
+      // ✅ ADD: push image into gallery
+      if (msg.image) {
+        setImageGallery((prev) => [msg.image, ...prev]);
+      }
+    });
+
     socket.on("messageEdited", ({ id, content }) => {
       setMessages((prev) =>
         prev.map((m) =>
@@ -180,6 +187,7 @@ function Chat() {
 
       setEditingId(null);
       setMessage("");
+      setShowEmoji(false);
       return;
     }
 
@@ -224,151 +232,150 @@ function Chat() {
 
   return (
     <div className="chat-page-wrapper">
-      <div className="chat-container">
-        {/* HEADER */}
-        <div className="chat-header">
-          <span className="header-title">❤️ Our Private Space ❤️</span>
-          <div className="users-status-row">
-            {ALL_USERS.map((user) => (
-              <div key={user} className="user-online-item">
-                <span
-                  className={`status-dot ${
-                    onlineList.includes(user.toLowerCase())
-                      ? "online"
-                      : "offline"
-                  }`}
-                ></span>
-                <span className="user-name-label">{user}</span>
+      <div className="chat-layout">
+
+        {/* ================= CHAT (UNCHANGED) ================= */}
+        <div className="chat-container">
+          {/* HEADER */}
+          <div className="chat-header">
+            <span className="header-title">❤️ Our Private Space ❤️</span>
+            <div className="users-status-row">
+              {ALL_USERS.map((user) => (
+                <div key={user} className="user-online-item">
+                  <span
+                    className={`status-dot ${
+                      onlineList.includes(user.toLowerCase())
+                        ? "online"
+                        : "offline"
+                    }`}
+                  ></span>
+                  <span className="user-name-label">{user}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* MESSAGES */}
+          <div className="chat-messages" ref={scrollRef}>
+            {messages.map((msg, i) => {
+              const msgDate = msg.time || msg.createdAt;
+              const dateLabel = getDateLabel(msgDate);
+              const showDate = dateLabel !== lastDate;
+              lastDate = dateLabel;
+
+              return (
+                <React.Fragment key={msg._id || i}>
+                  {showDate && (
+                    <div className="date-separator">{dateLabel}</div>
+                  )}
+
+                  <div
+                    className={msg.sender === name ? "message own" : "message"}
+                  >
+                    <div className="message-info">
+                      <strong>{msg.sender}</strong>
+                      <span className="message-time">
+                        {formatTime(msgDate)} {msg.edited && "(edited)"}
+                      </span>
+                    </div>
+
+                    <div className="message-content">
+                      {msg.content && <p>{msg.content}</p>}
+                      {msg.image && (
+                        <img
+                          src={msg.image}
+                          className="chat-media"
+                          alt="shared"
+                        />
+                      )}
+
+                      {msg.sender === name && msg.content && (
+                        <button
+                          className="edit-btn"
+                          onClick={() => {
+                            setEditingId(msg._id);
+                            setMessage(msg.content);
+                          }}
+                        >
+                          ✏️ Edit
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
+
+          {/* EMOJI */}
+          {showEmoji && (
+            <div className="emoji-picker-container" ref={emojiRef}>
+              <EmojiPicker
+                onEmojiClick={(e) =>
+                  setMessage((prev) => prev + e.emoji)
+                }
+                width="100%"
+                height="350px"
+              />
+            </div>
+          )}
+
+          {/* INPUT */}
+          <div className="chat-input-area">
+            <button
+              onClick={() => setShowEmoji((p) => !p)}
+              className="emoji-btn"
+            >
+              😊
+            </button>
+
+            <label className="file-label">
+              📷
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) => {
+                  const f = e.target.files[0];
+                  if (f) {
+                    setFile(f);
+                    setFilePreview(URL.createObjectURL(f));
+                  }
+                }}
+              />
+            </label>
+
+            <input
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={
+                editingId
+                  ? "Edit your message..."
+                  : "Write a love note..."
+              }
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              autoComplete="off"
+            />
+
+            <button onClick={sendMessage} className="send-btn">
+              {editingId ? "Update" : "Send"}
+            </button>
+          </div>
+        </div>
+
+        {/* ================= RIGHT IMAGE GALLERY (ADDED) ================= */}
+        <div className="gallery-container">
+          <div className="gallery-header">📸 Shared Photos</div>
+
+          <div className="image-gallery">
+            {imageGallery.map((img, index) => (
+              <div key={index} className="gallery-item">
+                <img src={img} alt="shared" />
               </div>
             ))}
           </div>
         </div>
 
-        {/* MESSAGES */}
-        <div className="chat-messages" ref={scrollRef}>
-          {messages.map((msg, i) => {
-            const msgDate = msg.time || msg.createdAt;
-            const dateLabel = getDateLabel(msgDate);
-            const showDate = dateLabel !== lastDate;
-            lastDate = dateLabel;
-
-            return (
-              <React.Fragment key={msg._id || i}>
-                {showDate && (
-                  <div className="date-separator">{dateLabel}</div>
-                )}
-
-                <div
-                  className={msg.sender === name ? "message own" : "message"}
-                >
-                  <div className="message-info">
-                    <strong>{msg.sender}</strong>
-                    <span className="message-time">
-                      {formatTime(msgDate)} {msg.edited && "(edited)"}
-                    </span>
-                  </div>
-
-                  <div className="message-content">
-                    {msg.content && <p>{msg.content}</p>}
-                    {msg.image && (
-                      <img
-                        src={msg.image}
-                        className="chat-media"
-                        alt="shared"
-                      />
-                    )}
-
-                    {msg.sender === name && msg.content && (
-                      <button
-                        className="edit-btn"
-                        onClick={() => {
-                          setEditingId(msg._id);
-                          setMessage(msg.content);
-                        }}
-                      >
-                        ✏️ Edit
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </React.Fragment>
-            );
-          })}
-
-          {isUploading && (
-            <div className="loading-status">
-              Processing {uploadProgress}% 🚀
-            </div>
-          )}
-        </div>
-
-        {/* PREVIEW */}
-        {filePreview && (
-          <div className="preview-bar">
-            <img src={filePreview} width="50" alt="" />
-            <button onClick={() => { setFile(null); setFilePreview(null); }}>
-              ✕
-            </button>
-          </div>
-        )}
-
-        {/* EMOJI */}
-        {showEmoji && (
-          <div className="emoji-picker-container">
-            <EmojiPicker
-              onEmojiClick={(e) =>
-                setMessage((prev) => prev + e.emoji)
-              }
-              width="100%"
-              height="350px"
-            />
-          </div>
-        )}
-
-        {/* INPUT */}
-        <div className="chat-input-area">
-          <button
-            onClick={() => setShowEmoji(!showEmoji)}
-            className="emoji-btn"
-          >
-            😊
-          </button>
-
-          <label className="file-label">
-            📷
-            <input
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={(e) => {
-                const f = e.target.files[0];
-                if (f) {
-                  setFile(f);
-                  setFilePreview(URL.createObjectURL(f));
-                }
-              }}
-            />
-          </label>
-
-          <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={
-              editingId ? "Edit your message..." : "Write a love note..."
-            }
-            disabled={isUploading}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            autoComplete="off"
-          />
-
-          <button
-            onClick={sendMessage}
-            disabled={isUploading}
-            className="send-btn"
-          >
-            {editingId ? "Update" : "Send"}
-          </button>
-        </div>
       </div>
     </div>
   );

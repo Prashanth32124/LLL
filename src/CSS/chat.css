@@ -276,3 +276,80 @@ body {
 .edit-btn:hover {
   text-decoration: underline;
 }
+/* ===================== CHAT + GALLERY LAYOUT ===================== */
+.chat-layout {
+  display: flex;
+  gap: 16px;                  /* space between chat & gallery */
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+}
+
+/* ===================== CHAT CONTAINER FIX ===================== */
+.chat-container {
+  flex: 1;                    /* takes remaining space */
+  max-width: 420px;
+}
+
+/* ===================== GALLERY CONTAINER ===================== */
+.gallery-container {
+  width: 320px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ===================== GALLERY HEADER ===================== */
+.gallery-header {
+  padding: 12px;
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  color: white;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+/* ===================== IMAGE GRID ===================== */
+.image-gallery {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 × 4 grid */
+  gap: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ===================== IMAGE ITEM ===================== */
+.gallery-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* ===================== GALLERY SCROLLBAR ===================== */
+.image-gallery::-webkit-scrollbar {
+  width: 5px;
+}
+
+.image-gallery::-webkit-scrollbar-thumb {
+  background: #ffb6c1;
+  border-radius: 10px;
+}
+
+/* ===================== MOBILE RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  .gallery-container {
+    display: none;   /* hide gallery on small screens */
+  }
+}
