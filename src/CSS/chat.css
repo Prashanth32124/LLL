@@ -353,3 +353,53 @@ body {
     display: none;   /* hide gallery on small screens */
   }
 }
+/* ===================== MOBILE IMAGES BUTTON ===================== */
+.mobile-images-btn {
+  display: none; /* hidden on desktop */
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ===================== MOBILE GALLERY OVERLAY ===================== */
+@media (max-width: 900px) {
+  .mobile-images-btn {
+    display: block; /* show button only on mobile */
+  }
+
+  .gallery-container {
+    display: none; /* hidden by default */
+  }
+
+  .gallery-container.show-mobile-gallery {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gallery-inner {
+    width: 94%;
+    max-height: 90vh;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image-gallery {
+    grid-template-columns: repeat(4, 1fr);
+    overflow-y: auto;
+  }
+}

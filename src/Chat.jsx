@@ -19,10 +19,13 @@ function Chat() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  // ✅ MOBILE GALLERY TOGGLE (ADDED)
+  const [showGalleryMobile, setShowGalleryMobile] = useState(false);
+
   // ✅ EDIT STATE
   const [editingId, setEditingId] = useState(null);
 
-  // ✅ IMAGE GALLERY STATE (ADDED ONLY)
+  // ✅ IMAGE GALLERY STATE
   const [imageGallery, setImageGallery] = useState([]);
 
   const scrollRef = useRef(null);
@@ -48,7 +51,6 @@ function Chat() {
     };
   }, [showEmoji]);
 
-
   /* 🔽 AUTO SCROLL */
   useEffect(() => {
     if (scrollRef.current) {
@@ -63,10 +65,7 @@ function Chat() {
       .then((res) => {
         setMessages(res.data);
 
-        // ✅ ADD: load images into gallery
-        const imgs = res.data
-          .filter((m) => m.image)
-          .map((m) => m.image);
+        const imgs = res.data.filter((m) => m.image).map((m) => m.image);
         setImageGallery(imgs);
       });
 
@@ -74,8 +73,6 @@ function Chat() {
 
     socket.on("receiveMessage", (msg) => {
       setMessages((prev) => [...prev, msg]);
-
-      // ✅ ADD: push image into gallery
       if (msg.image) {
         setImageGallery((prev) => [msg.image, ...prev]);
       }
@@ -91,9 +88,7 @@ function Chat() {
       );
     });
 
-    socket.on("updateUserStatus", (users) =>
-      setOnlineList(users)
-    );
+    socket.on("updateUserStatus", (users) => setOnlineList(users));
 
     return () => {
       socket.off("receiveMessage");
@@ -233,12 +228,19 @@ function Chat() {
   return (
     <div className="chat-page-wrapper">
       <div className="chat-layout">
-
-        {/* ================= CHAT (UNCHANGED) ================= */}
+        {/* ================= CHAT ================= */}
         <div className="chat-container">
-          {/* HEADER */}
           <div className="chat-header">
             <span className="header-title">❤️ Our Private Space ❤️</span>
+
+            {/* ✅ MOBILE IMAGES BUTTON (ADDED) */}
+            <button
+              className="mobile-images-btn"
+              onClick={() => setShowGalleryMobile(true)}
+            >
+              📸 Images
+            </button>
+
             <div className="users-status-row">
               {ALL_USERS.map((user) => (
                 <div key={user} className="user-online-item">
@@ -255,7 +257,6 @@ function Chat() {
             </div>
           </div>
 
-          {/* MESSAGES */}
           <div className="chat-messages" ref={scrollRef}>
             {messages.map((msg, i) => {
               const msgDate = msg.time || msg.createdAt;
@@ -307,20 +308,16 @@ function Chat() {
             })}
           </div>
 
-          {/* EMOJI */}
           {showEmoji && (
             <div className="emoji-picker-container" ref={emojiRef}>
               <EmojiPicker
-                onEmojiClick={(e) =>
-                  setMessage((prev) => prev + e.emoji)
-                }
+                onEmojiClick={(e) => setMessage((p) => p + e.emoji)}
                 width="100%"
                 height="350px"
               />
             </div>
           )}
 
-          {/* INPUT */}
           <div className="chat-input-area">
             <button
               onClick={() => setShowEmoji((p) => !p)}
@@ -349,9 +346,7 @@ function Chat() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder={
-                editingId
-                  ? "Edit your message..."
-                  : "Write a love note..."
+                editingId ? "Edit your message..." : "Write a love note..."
               }
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               autoComplete="off"
@@ -363,19 +358,28 @@ function Chat() {
           </div>
         </div>
 
-        {/* ================= RIGHT IMAGE GALLERY (ADDED) ================= */}
-        <div className="gallery-container">
-          <div className="gallery-header">📸 Shared Photos</div>
+        {/* ================= IMAGE GALLERY ================= */}
+        <div
+          className={`gallery-container ${
+            showGalleryMobile ? "show-mobile-gallery" : ""
+          }`}
+          onClick={() => setShowGalleryMobile(false)}
+        >
+          <div
+            className="gallery-inner"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="gallery-header">📸 Shared Photos</div>
 
-          <div className="image-gallery">
-            {imageGallery.map((img, index) => (
-              <div key={index} className="gallery-item">
-                <img src={img} alt="shared" />
-              </div>
-            ))}
+            <div className="image-gallery">
+              {imageGallery.map((img, index) => (
+                <div key={index} className="gallery-item">
+                  <img src={img} alt="shared" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
